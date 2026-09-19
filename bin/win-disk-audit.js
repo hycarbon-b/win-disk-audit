@@ -5,7 +5,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const skillName = 'windows-dev-disk-audit';
+const skillName = 'win-disk-audit';
 const source = path.resolve(__dirname, '..', 'skills', skillName);
 
 function fail(message) {
@@ -14,9 +14,9 @@ function fail(message) {
 }
 
 function usage() {
-  process.stdout.write(`Windows Developer Disk Audit\n\n` +
+  process.stdout.write(`Win Disk Audit\n\n` +
     `Install from GitHub:\n` +
-    `  npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent codex\n\n` +
+    `  npx --yes github:hycarbon-b/win-disk-audit install --agent codex\n\n` +
     `Commands:\n` +
     `  install [--agent codex|claude|agents] [--target <skills-dir>] [--replace]\n` +
     `  path\n\n` +

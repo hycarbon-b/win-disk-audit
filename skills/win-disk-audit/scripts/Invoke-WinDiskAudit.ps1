@@ -374,8 +374,8 @@ $result = [ordered]@{
     )
 }
 
-$jsonPath = Join-Path $OutputDirectory 'windows-dev-disk-audit.json'
-$markdownPath = Join-Path $OutputDirectory 'windows-dev-disk-audit.md'
+$jsonPath = Join-Path $OutputDirectory 'win-disk-audit.json'
+$markdownPath = Join-Path $OutputDirectory 'win-disk-audit.md'
 $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $jsonPath -Encoding UTF8
 
 $md = New-Object Text.StringBuilder

@@ -1,11 +1,11 @@
 ---
-name: windows-dev-disk-audit
+name: win-disk-audit
 description: Diagnose Windows system-drive pressure on developer machines, especially where WSL, Docker, VS Code, Codex, Claude Code, browsers, and language-package caches may compete for space. Use when a user asks what is filling C:, whether WSL swap or ext4.vhdx is responsible, or which development caches are safe to review. Run the bundled read-only scanner and distinguish measured disk use from reclaim estimates; do not clean, prune, compact, or change Windows settings without explicit approval.
 metadata:
   short-description: Diagnose Windows developer disk use
 ---
 
-# Windows Developer Disk Audit
+# Win Disk Audit
 
 Use this skill to produce a reliable, read-only disk audit before recommending cleanup. Start with the baseline scanner, then choose focused collectors when the evidence calls for them. The baseline report is Markdown plus JSON; focused collectors emit the same stable record shape as JSON by default.
 
@@ -14,10 +14,10 @@ Use this skill to produce a reliable, read-only disk audit before recommending c
 1. Run the Windows-side scan first. It does not start stopped WSL distributions.
 
    ```powershell
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Invoke-WindowsDevDiskAudit.ps1 -Mode Fast -OutputDirectory .\audit-output
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Invoke-WinDiskAudit.ps1 -Mode Fast -OutputDirectory .\audit-output
    ```
 
-2. Read `windows-dev-disk-audit.md` for the user-facing result and `windows-dev-disk-audit.json` for raw values. Parent and child rows overlap; never add them together.
+2. Read `win-disk-audit.md` for the user-facing result and `win-disk-audit.json` for raw values. Parent and child rows overlap; never add them together.
 3. Choose further read-only collection based on the unexplained or high-impact paths. Do not treat the baseline path list as exhaustive.
 
    | Situation | Collector |
@@ -44,7 +44,7 @@ The collectors are composable rather than a closed inventory. They return JSON r
 
 ## Resources
 
-- Run `scripts/Invoke-WindowsDevDiskAudit.ps1` for the Windows inventory.
+- Run `scripts/Invoke-WinDiskAudit.ps1` for the Windows inventory.
 - The script calls `scripts/Get-WslRuntimeAudit.sh` only for approved runtime WSL inspection.
 - `scripts/modules/` contains focused collector modules for arbitrary paths, developer tools, browser profiles, and WSL.
 - Read `references/report-format.md` when presenting, adapting, or validating the report format.

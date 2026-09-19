@@ -1,30 +1,30 @@
-# Windows Developer Disk Audit
+# Win Disk Audit
 
 An Agent Skill for read-only diagnosis of Windows system-drive pressure on developer machines using WSL, Docker, VS Code, Codex, Claude Code, browsers, and language-package caches.
 
-The installable Skill is [`skills/windows-dev-disk-audit`](skills/windows-dev-disk-audit). It intentionally contains only agent instructions, UI metadata, executable helpers, and a report-format reference. Repository documentation, examples, tests, and evaluations stay outside that installable folder.
+The installable Skill is [`skills/win-disk-audit`](skills/win-disk-audit). It intentionally contains only agent instructions, UI metadata, executable helpers, and a report-format reference. Repository documentation, examples, tests, and evaluations stay outside that installable folder.
 
 ## Install from GitHub with npm
 
 Install the Skill into Codex with one command:
 
 ```powershell
-npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent codex
+npx --yes github:hycarbon-b/win-disk-audit install --agent codex
 ```
 
-The installer copies only `skills/windows-dev-disk-audit` into `%USERPROFILE%\.codex\skills\windows-dev-disk-audit`; it does not scan disks, start WSL, or delete data. Restart Codex or start a new task after installation.
+The installer copies only `skills/win-disk-audit` into `%USERPROFILE%\.codex\skills\win-disk-audit`; it does not scan disks, start WSL, or delete data. Restart Codex or start a new task after installation.
 
 Other supported targets:
 
 ```powershell
 # Claude Code
-npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent claude
+npx --yes github:hycarbon-b/win-disk-audit install --agent claude
 
 # Shared agent-skill location
-npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent agents
+npx --yes github:hycarbon-b/win-disk-audit install --agent agents
 
 # An explicit skills parent directory
-npx --yes github:hycarbon-b/windows-dev-disk-audit install --target D:\agent-skills
+npx --yes github:hycarbon-b/win-disk-audit install --target D:\agent-skills
 ```
 
 If an installed copy exists, use `--replace`; the installer moves the previous Skill to a timestamped backup in the same directory.

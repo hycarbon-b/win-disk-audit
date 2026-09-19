@@ -7,17 +7,17 @@ $required = @(
     'README.md',
     'LICENSE',
     'package.json',
-    'bin\windows-dev-disk-audit.js',
-    'skills\windows-dev-disk-audit\SKILL.md',
-    'skills\windows-dev-disk-audit\agents\openai.yaml',
-    'skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1',
-    'skills\windows-dev-disk-audit\scripts\Get-WslRuntimeAudit.sh',
-    'skills\windows-dev-disk-audit\scripts\modules\AuditCommon.psm1',
-    'skills\windows-dev-disk-audit\scripts\modules\Get-DirectoryUsage.ps1',
-    'skills\windows-dev-disk-audit\scripts\modules\Get-DeveloperToolUsage.ps1',
-    'skills\windows-dev-disk-audit\scripts\modules\Get-BrowserStorage.ps1',
-    'skills\windows-dev-disk-audit\scripts\modules\Get-WslUsage.ps1',
-    'skills\windows-dev-disk-audit\references\report-format.md',
+    'bin\win-disk-audit.js',
+    'skills\win-disk-audit\SKILL.md',
+    'skills\win-disk-audit\agents\openai.yaml',
+    'skills\win-disk-audit\scripts\Invoke-WinDiskAudit.ps1',
+    'skills\win-disk-audit\scripts\Get-WslRuntimeAudit.sh',
+    'skills\win-disk-audit\scripts\modules\AuditCommon.psm1',
+    'skills\win-disk-audit\scripts\modules\Get-DirectoryUsage.ps1',
+    'skills\win-disk-audit\scripts\modules\Get-DeveloperToolUsage.ps1',
+    'skills\win-disk-audit\scripts\modules\Get-BrowserStorage.ps1',
+    'skills\win-disk-audit\scripts\modules\Get-WslUsage.ps1',
+    'skills\win-disk-audit\references\report-format.md',
     'examples\example-report.md',
     'evals\evals.json'
 )
@@ -27,19 +27,19 @@ foreach ($relative in $required) {
     if (-not (Test-Path -LiteralPath $path)) { throw ('Missing required file: ' + $relative) }
 }
 
-$skill = Get-Content -LiteralPath (Join-Path $root 'skills\windows-dev-disk-audit\SKILL.md') -Raw -Encoding UTF8
-if ($skill -notmatch '(?s)^---\s+name:\s+windows-dev-disk-audit\s+description:') {
+$skill = Get-Content -LiteralPath (Join-Path $root 'skills\win-disk-audit\SKILL.md') -Raw -Encoding UTF8
+if ($skill -notmatch '(?s)^---\s+name:\s+win-disk-audit\s+description:') {
     throw 'SKILL.md frontmatter is missing or invalid.'
 }
 if (($skill -split "`n").Count -gt 500) { throw 'SKILL.md exceeds 500 lines.' }
 
-$uiMetadata = Get-Content -LiteralPath (Join-Path $root 'skills\windows-dev-disk-audit\agents\openai.yaml') -Raw -Encoding UTF8
+$uiMetadata = Get-Content -LiteralPath (Join-Path $root 'skills\win-disk-audit\agents\openai.yaml') -Raw -Encoding UTF8
 foreach ($field in @('display_name:', 'short_description:', 'default_prompt:')) {
     if (-not $uiMetadata.Contains($field)) { throw ('agents/openai.yaml missing field: ' + $field) }
 }
 
 $evals = Get-Content -LiteralPath (Join-Path $root 'evals\evals.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-if ($evals.skill_name -ne 'windows-dev-disk-audit') { throw 'evals.json skill_name mismatch.' }
+if ($evals.skill_name -ne 'win-disk-audit') { throw 'evals.json skill_name mismatch.' }
 if (@($evals.evals).Count -lt 3) { throw 'At least three eval cases are required.' }
 
 $example = Get-Content -LiteralPath (Join-Path $root 'examples\example-report.md') -Raw -Encoding UTF8

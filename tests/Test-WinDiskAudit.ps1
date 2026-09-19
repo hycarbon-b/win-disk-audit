@@ -2,7 +2,7 @@
 param()
 
 $ErrorActionPreference = 'Stop'
-$tempRoot = Join-Path $env:TEMP ('windows-dev-disk-audit-test-' + [guid]::NewGuid().ToString('N'))
+$tempRoot = Join-Path $env:TEMP ('win-disk-audit-test-' + [guid]::NewGuid().ToString('N'))
 $profile = Join-Path $tempRoot 'profile'
 $output = Join-Path $tempRoot 'output'
 
@@ -21,11 +21,11 @@ try {
     [IO.File]::WriteAllBytes((Join-Path $profile 'AppData\Local\npm-cache\cache.bin'), (New-Object byte[] (1MB)))
     [IO.File]::WriteAllBytes((Join-Path $profile '.codex\state.bin'), (New-Object byte[] (256KB)))
 
-    $scanner = Join-Path (Split-Path -Parent $PSScriptRoot) 'skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1'
+    $scanner = Join-Path (Split-Path -Parent $PSScriptRoot) 'skills\win-disk-audit\scripts\Invoke-WinDiskAudit.ps1'
     & $scanner -Mode Fast -ProfileRoot $profile -OutputDirectory $output -Top 10
 
-    $jsonPath = Join-Path $output 'windows-dev-disk-audit.json'
-    $markdownPath = Join-Path $output 'windows-dev-disk-audit.md'
+    $jsonPath = Join-Path $output 'win-disk-audit.json'
+    $markdownPath = Join-Path $output 'win-disk-audit.md'
     if (-not (Test-Path -LiteralPath $jsonPath)) { throw 'JSON report was not created.' }
     if (-not (Test-Path -LiteralPath $markdownPath)) { throw 'Markdown report was not created.' }
 

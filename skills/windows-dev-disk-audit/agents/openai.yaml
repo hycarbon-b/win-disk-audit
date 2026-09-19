@@ -1,4 +1,0 @@
-interface:
-  display_name: "Windows Developer Disk Audit"
-  short_description: "Diagnose Windows developer disk use"
-  default_prompt: "Use $windows-dev-disk-audit to inspect my Windows system drive without deleting anything."

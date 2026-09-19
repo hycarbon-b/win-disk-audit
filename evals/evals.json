@@ -1,5 +1,5 @@
 {
-  "skill_name": "windows-dev-disk-audit",
+  "skill_name": "win-disk-audit",
   "evals": [
     {
       "id": 1,
