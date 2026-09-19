@@ -1,7 +1,7 @@
 # Windows Developer Disk Usage Audit
 
-Generated: 2026-09-19 17:42:58 +08:00  
-Scope: C:, profile `%USERPROFILE%`, WSL/VHDX, VS Code, Codex, Claude Code and common developer caches  
+Generated: 2026-09-19 17:42:58 +08:00
+Scope: C:, profile `%USERPROFILE%`, WSL/VHDX, VS Code, Codex, Claude Code and common developer caches
 Mode: Fast
 
 > Sanitized real-world output. Measurements are retained; the Windows account name is replaced with `%USERPROFILE%` and package identifiers are shortened.
