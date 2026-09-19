@@ -1,0 +1,41 @@
+{
+  "skill_name": "windows-dev-disk-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "My Windows C drive has only 8 GB left. I use WSL2, Docker, VS Code, Codex and Claude Code. Please inspect it read-only and tell me whether WSL swap is actually the problem. Do not delete anything.",
+      "expected_output": "A standard audit report that uses the bundled scanner, distinguishes WSL ext4.vhdx from swap, reports Windows page file separately, and ranks cleanup candidates by risk.",
+      "files": [],
+      "expectations": [
+        "No cleanup or destructive command is executed.",
+        "The report contains all nine required sections from references/report-format.md.",
+        "WSL VHDX, WSL swap, and Windows pagefile are treated as distinct items.",
+        "Sizes state whether they are logical, allocated, internally used, or estimates."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "C盘被开发环境占满了，帮我重点检查 vscode、codex、cc、npm、pnpm、uv、playwright 和浏览器缓存，输出统一格式并告诉我哪些可以重建。WSL 现在是停止状态，不要启动它。",
+      "expected_output": "A Chinese read-only report that keeps stopped WSL distributions stopped, inventories the named developer tools, identifies rebuildable caches, and highlights stateful data requiring review.",
+      "files": [],
+      "expectations": [
+        "Stopped WSL distributions are not started.",
+        "The named developer tools are covered or explicitly reported as absent.",
+        "Rebuildable cache is separated from session, workspace, browser-site, and system data.",
+        "The output follows the standard report section order."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run a full audit of D: for a Windows profile mounted at D:\\Profiles\\dev. Include WSL runtime and Docker reclaimability, save both machine-readable JSON and a Markdown report, but only propose cleanup commands for later approval.",
+      "expected_output": "A Full-mode scan with custom drive/profile arguments and opt-in WSL runtime inspection, producing both JSON and Markdown without executing cleanup.",
+      "files": [],
+      "expectations": [
+        "The scanner is invoked with the requested drive, profile root, Full mode, and WSL runtime flag.",
+        "Both JSON and Markdown outputs are produced or their output locations are clearly specified.",
+        "Docker values are described as reclaimability candidates rather than automatic deletion targets.",
+        "Cleanup commands remain proposals requiring approval."
+      ]
+    }
+  ]
+}
