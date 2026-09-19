@@ -1,89 +1,33 @@
-# windows-dev-disk-audit
+# Windows Developer Disk Audit
 
-A reusable Codex/Claude skill for diagnosing Windows system-drive pressure on developer workstations that use WSL, Docker, VS Code, Codex, Claude Code, Node, Python, Rust, browsers, and cloud-sync folders.
+An Agent Skill for read-only diagnosis of Windows system-drive pressure on developer machines using WSL, Docker, VS Code, Codex, Claude Code, browsers, and language-package caches.
 
-一个面向 Windows 开发者的只读磁盘占用诊断 Skill，重点回答：
+The installable Skill is [`skills/windows-dev-disk-audit`](skills/windows-dev-disk-audit). It intentionally contains only agent instructions, UI metadata, executable helpers, and a report-format reference. Repository documentation, examples, tests, and evaluations stay outside that installable folder.
 
-- C 盘究竟被什么占满？
-- 大文件是 WSL `ext4.vhdx`、WSL swap，还是 Windows `pagefile.sys`？
-- Docker、npm、pip、pnpm、uv、Playwright、VS Code、Codex、Claude Code 分别占多少？
-- 哪些内容可安全重建，哪些需要人工确认？
-- 为什么删掉 WSL 内文件后，C 盘空间没有立即回来？
+## Install
 
-## Design principles
-
-- Read-only by default; the scanner never cleans, prunes, compacts, uninstalls, or changes system configuration.
-- Separates logical, allocated, internally used, and estimated-reclaim sizes.
-- Does not start stopped WSL distributions unless `-InspectWslRuntime` is explicitly supplied.
-- Produces both Markdown for humans and JSON for automation.
-- Uses a stable report format so audits can be compared over time.
-
-## Repository layout
-
-```text
-SKILL.md
-scripts/
-  Invoke-WindowsDevDiskAudit.ps1
-  Get-WslRuntimeAudit.sh
-  Test-WindowsDevDiskAudit.ps1
-references/
-  report-format.md
-examples/
-  example-report.md
-evals/
-  evals.json
-tests/
-  Validate-Repository.ps1
-```
-
-## Run directly
+Copy or clone the skill folder—not this repository root—into your agent's skill directory:
 
 ```powershell
 git clone https://github.com/hycarbon-b/windows-dev-disk-audit.git
-cd windows-dev-disk-audit
-
-# Fast, Windows-side, read-only scan. Stopped WSL distributions remain stopped.
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Invoke-WindowsDevDiskAudit.ps1 `
-  -Mode Fast `
-  -OutputDirectory .\audit-output
-
-# Optional: start WSL for df/swap/home-cache/Docker inspection.
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Invoke-WindowsDevDiskAudit.ps1 `
-  -Mode Fast `
-  -InspectWslRuntime `
-  -OutputDirectory .\audit-output-wsl
+Copy-Item .\windows-dev-disk-audit\skills\windows-dev-disk-audit "$env:USERPROFILE\.codex\skills\windows-dev-disk-audit" -Recurse
 ```
 
-For a slower top-level drive scan, replace `-Mode Fast` with `-Mode Full`.
+Restart Codex after installation. The skill is then eligible whenever a user asks why Windows C: is full, whether WSL swap/VHDX is responsible, or which developer caches are safe to review.
 
-## Install as a skill
-
-Clone or copy this repository into a skill directory recognized by your agent. Typical personal locations are:
-
-```text
-# Codex
-%USERPROFILE%\.codex\skills\windows-dev-disk-audit\
-
-# Claude Code / shared agent skills
-%USERPROFILE%\.agents\skills\windows-dev-disk-audit\
-```
-
-Restart or reload the agent after installation. Example requests:
-
-- “分析一下 Windows C 盘占用，重点检查 WSL、VS Code、Codex 和 Claude Code 缓存。”
-- “Is WSL swap filling my C drive, or is it ext4.vhdx/Docker?”
-- “Generate a read-only disk audit and rank safe cleanup candidates.”
-
-## Validate
+## Use directly
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\Validate-Repository.ps1
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Test-WindowsDevDiskAudit.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1 -Mode Fast -OutputDirectory .\audit-output
 ```
 
-## Standard output
+The scanner is read-only. It does not start stopped WSL distributions unless `-InspectWslRuntime` is explicitly supplied, and it never performs cleanup.
 
-See [`examples/example-report.md`](examples/example-report.md). The mandatory contract is documented in [`references/report-format.md`](references/report-format.md).
+## Development
+
+- [Report format example](examples/example-report.md)
+- [Evaluation prompts](evals/evals.json)
+- [Validation scripts](tests)
 
 ## License
 

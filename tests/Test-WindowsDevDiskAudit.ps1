@@ -21,7 +21,7 @@ try {
     [IO.File]::WriteAllBytes((Join-Path $profile 'AppData\Local\npm-cache\cache.bin'), (New-Object byte[] (1MB)))
     [IO.File]::WriteAllBytes((Join-Path $profile '.codex\state.bin'), (New-Object byte[] (256KB)))
 
-    $scanner = Join-Path $PSScriptRoot 'Invoke-WindowsDevDiskAudit.ps1'
+    $scanner = Join-Path (Split-Path -Parent $PSScriptRoot) 'skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1'
     & $scanner -Mode Fast -ProfileRoot $profile -OutputDirectory $output -Top 10
 
     $jsonPath = Join-Path $output 'windows-dev-disk-audit.json'
