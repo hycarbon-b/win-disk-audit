@@ -4,24 +4,43 @@ An Agent Skill for read-only diagnosis of Windows system-drive pressure on devel
 
 The installable Skill is [`skills/windows-dev-disk-audit`](skills/windows-dev-disk-audit). It intentionally contains only agent instructions, UI metadata, executable helpers, and a report-format reference. Repository documentation, examples, tests, and evaluations stay outside that installable folder.
 
-## Install
+## Install from GitHub with npm
 
-Copy or clone the skill folder—not this repository root—into your agent's skill directory:
-
-```powershell
-git clone https://github.com/hycarbon-b/windows-dev-disk-audit.git
-Copy-Item .\windows-dev-disk-audit\skills\windows-dev-disk-audit "$env:USERPROFILE\.codex\skills\windows-dev-disk-audit" -Recurse
-```
-
-Restart Codex after installation. The skill is then eligible whenever a user asks why Windows C: is full, whether WSL swap/VHDX is responsible, or which developer caches are safe to review.
-
-## Use directly
+Install the Skill into Codex with one command:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1 -Mode Fast -OutputDirectory .\audit-output
+npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent codex
 ```
 
-The scanner is read-only. It does not start stopped WSL distributions unless `-InspectWslRuntime` is explicitly supplied, and it never performs cleanup.
+The installer copies only `skills/windows-dev-disk-audit` into `%USERPROFILE%\.codex\skills\windows-dev-disk-audit`; it does not scan disks, start WSL, or delete data. Restart Codex or start a new task after installation.
+
+Other supported targets:
+
+```powershell
+# Claude Code
+npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent claude
+
+# Shared agent-skill location
+npx --yes github:hycarbon-b/windows-dev-disk-audit install --agent agents
+
+# An explicit skills parent directory
+npx --yes github:hycarbon-b/windows-dev-disk-audit install --target D:\agent-skills
+```
+
+If an installed copy exists, use `--replace`; the installer moves the previous Skill to a timestamped backup in the same directory.
+
+## Collection modules
+
+The installed Skill begins with a read-only baseline scan, then an agent selects additional collectors only when their results are relevant:
+
+| Collector | Use when |
+|---|---|
+| `Get-DeveloperToolUsage.ps1` | VS Code, Codex, Claude, or package caches need breakdown. |
+| `Get-BrowserStorage.ps1` | Edge or Chrome profile data is a material consumer. |
+| `Get-WslUsage.ps1` | WSL VHDX needs analysis; add `-Runtime` only after permission. |
+| `Get-DirectoryUsage.ps1` | An exact unexplained path needs a follow-up measurement. |
+
+Modules output consistent JSON records, allowing the agent to collect additional evidence without altering the core scanner or fabricating a report schema.
 
 ## Development
 

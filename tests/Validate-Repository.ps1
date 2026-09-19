@@ -6,10 +6,17 @@ $root = Split-Path -Parent $PSScriptRoot
 $required = @(
     'README.md',
     'LICENSE',
+    'package.json',
+    'bin\windows-dev-disk-audit.js',
     'skills\windows-dev-disk-audit\SKILL.md',
     'skills\windows-dev-disk-audit\agents\openai.yaml',
     'skills\windows-dev-disk-audit\scripts\Invoke-WindowsDevDiskAudit.ps1',
     'skills\windows-dev-disk-audit\scripts\Get-WslRuntimeAudit.sh',
+    'skills\windows-dev-disk-audit\scripts\modules\AuditCommon.psm1',
+    'skills\windows-dev-disk-audit\scripts\modules\Get-DirectoryUsage.ps1',
+    'skills\windows-dev-disk-audit\scripts\modules\Get-DeveloperToolUsage.ps1',
+    'skills\windows-dev-disk-audit\scripts\modules\Get-BrowserStorage.ps1',
+    'skills\windows-dev-disk-audit\scripts\modules\Get-WslUsage.ps1',
     'skills\windows-dev-disk-audit\references\report-format.md',
     'examples\example-report.md',
     'evals\evals.json'

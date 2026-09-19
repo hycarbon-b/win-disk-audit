@@ -7,7 +7,7 @@ metadata:
 
 # Windows Developer Disk Audit
 
-Use this skill to produce a reliable, read-only disk audit before recommending cleanup. The scanner accounts for common developer tooling and writes Markdown plus JSON so the report can be reviewed or reused.
+Use this skill to produce a reliable, read-only disk audit before recommending cleanup. Start with the baseline scanner, then choose focused collectors when the evidence calls for them. The baseline report is Markdown plus JSON; focused collectors emit the same stable record shape as JSON by default.
 
 ## Workflow
 
@@ -18,8 +18,17 @@ Use this skill to produce a reliable, read-only disk audit before recommending c
    ```
 
 2. Read `windows-dev-disk-audit.md` for the user-facing result and `windows-dev-disk-audit.json` for raw values. Parent and child rows overlap; never add them together.
-3. Use `-Mode Full` only when Fast mode does not explain the drive total. Full mode scans top-level folders and can take several minutes.
-4. Ask permission before runtime WSL inspection. Only then use `-InspectWslRuntime`, which can start distributions to collect `df`, swap, home-cache, and Docker data.
+3. Choose further read-only collection based on the unexplained or high-impact paths. Do not treat the baseline path list as exhaustive.
+
+   | Situation | Collector |
+   |---|---|
+   | VS Code, Codex, Claude, language caches | `scripts/modules/Get-DeveloperToolUsage.ps1` |
+   | Edge or Chrome profile is large | `scripts/modules/Get-BrowserStorage.ps1` |
+   | A specific path needs explanation | `scripts/modules/Get-DirectoryUsage.ps1 -Path <exact-path>` |
+   | WSL VHDX needs inspection | `scripts/modules/Get-WslUsage.ps1` |
+
+4. Use `-Mode Full` only when Fast mode does not explain the drive total. Full mode scans top-level folders and can take several minutes.
+5. Ask permission before `Get-WslUsage.ps1 -Runtime` or the baseline `-InspectWslRuntime`; either can start WSL to collect `df`, swap, home-cache, and Docker data.
 
 ## Interpretation and handoff
 
@@ -29,8 +38,13 @@ Use this skill to produce a reliable, read-only disk audit before recommending c
 - Docker reclaimability is an estimate. Cleaning Linux files will not return Windows space until the relevant VHDX is compacted after WSL shuts down.
 - If the user approves cleanup, resolve exact targets, show the proposed commands, measure free space before/after, and treat VHDX, page-file, hibernation, and Docker-volume operations as separate approvals.
 
+## Module contract
+
+The collectors are composable rather than a closed inventory. They return JSON records with `schema_version`, `module`, `category`, `path`, `logical_bytes`, `classification`, and `notes`; use `-AsObject` only when composing them in PowerShell. This lets you collect additional evidence for an exact path without rewriting the baseline scanner or inventing a new report format.
+
 ## Resources
 
 - Run `scripts/Invoke-WindowsDevDiskAudit.ps1` for the Windows inventory.
 - The script calls `scripts/Get-WslRuntimeAudit.sh` only for approved runtime WSL inspection.
+- `scripts/modules/` contains focused collector modules for arbitrary paths, developer tools, browser profiles, and WSL.
 - Read `references/report-format.md` when presenting, adapting, or validating the report format.

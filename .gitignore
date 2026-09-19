@@ -1,5 +1,6 @@
 audit-output*/
 *.skill
+*.tgz
 *.zip
 .DS_Store
 Thumbs.db

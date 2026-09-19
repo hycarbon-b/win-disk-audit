@@ -1,0 +1,28 @@
+{
+  "name": "@hycarbon-b/windows-dev-disk-audit",
+  "version": "1.2.0",
+  "description": "Install the Windows Developer Disk Audit Codex skill from GitHub.",
+  "private": true,
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "windows-dev-disk-audit": "bin/windows-dev-disk-audit.js"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hycarbon-b/windows-dev-disk-audit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hycarbon-b/windows-dev-disk-audit/issues"
+  },
+  "homepage": "https://github.com/hycarbon-b/windows-dev-disk-audit#readme"
+}

@@ -35,6 +35,14 @@ function Escape-MarkdownCell {
     return ($Value -replace '\|', '\|') -replace "`r?`n", ' '
 }
 
+function Convert-WindowsPathToWsl {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if ($Path -match '^([A-Za-z]):\\(.*)$') {
+        return ('/mnt/{0}/{1}' -f $matches[1].ToLowerInvariant(), ($matches[2] -replace '\\', '/'))
+    }
+    throw ('Cannot convert this path to a standard WSL mount path: ' + $Path)
+}
+
 function Get-DirectoryLogicalBytes {
     param([Parameter(Mandatory = $true)][string]$Path)
 
@@ -298,7 +306,7 @@ if ($InspectWslRuntime -and (Get-Command wsl.exe -ErrorAction SilentlyContinue))
         $distro = (($rawName -replace "`0", '').Trim())
         if ([string]::IsNullOrWhiteSpace($distro)) { continue }
         try {
-            $linuxScript = (& wsl.exe -d $distro -- wslpath -a $wslAuditScript 2>$null | Select-Object -First 1).Trim()
+            $linuxScript = Convert-WindowsPathToWsl -Path $wslAuditScript
             $runtimeText = (& wsl.exe -d $distro -- bash $linuxScript 2>&1) -join "`n"
             $wslRuntime += [pscustomobject]@{
                 Distribution = $distro
